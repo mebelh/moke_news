@@ -7,7 +7,7 @@ import {fetchNews} from '../../redux/actions'
 
 class Index extends React.Component {
    static async getInitialProps(){
-      const res = await fetch('http://newsapi.org/v2/top-headlines?country=us&apiKey=2fa2b9166a9d4f8a9cdb5bd306d40a71')
+      const res = await fetch('https://newsapi.org/v2/top-headlines?country=us&apiKey=2fa2b9166a9d4f8a9cdb5bd306d40a71')
       const newsData = await res.json()
       return {newsData: newsData['articles']}
    }
