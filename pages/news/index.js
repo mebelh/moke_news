@@ -6,21 +6,37 @@ import React from 'react'
 import {fetchNews} from '../../redux/actions'
 
 class Index extends React.Component {
-   static async getInitialProps(){
+   static async getInitialProps({query ,req}){
+      if(!req){
+         return {
+            newsData: null
+         }
+      }
       const res = await fetch('https://newsapi.org/v2/top-headlines?country=us&apiKey=2fa2b9166a9d4f8a9cdb5bd306d40a71')
       const newsData = await res.json()
       return {newsData: newsData['articles']}
    }
    constructor(props) {
       super(props)
+      this.state = {
+         newsData: this.props.newsData
+      }
    }
+   componentDidMount() {
+      const load = async () => {
+         const res = await fetch('https://newsapi.org/v2/top-headlines?country=us&apiKey=2fa2b9166a9d4f8a9cdb5bd306d40a71')
+         const newsData = await res.json()
+         this.setState({newsData: newsData['articles']})
+      }
+      load()
+   }
+
    render(){
-      console.log(this.props)
       return (
          <>
             <Navbar />
             <Container>
-               {this.props.newsData.map((el, id) => <Post {...el} id={id} key={el.title}/>)}
+               {this.state.newsData && this.state.newsData.map((el, id) => <Post {...el} id={id} key={el.title}/>)}
             </Container>
          </>
       )
