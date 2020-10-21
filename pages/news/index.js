@@ -22,6 +22,7 @@ class Index extends React.Component {
          newsData: this.props.newsData
       }
    }
+
    componentDidMount() {
       const load = async () => {
          const res = await fetch('https://newsapi.org/v2/top-headlines?country=us&apiKey=2fa2b9166a9d4f8a9cdb5bd306d40a71')
