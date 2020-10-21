@@ -1,4 +1,5 @@
 import withRedux from 'next-redux-wrapper'
+import NextNprogress from 'nextjs-progressbar'
 import {applyMiddleware, compose, createStore} from 'redux'
 import {Provider} from 'react-redux'
 import App from 'next/app'
@@ -25,6 +26,12 @@ class MyApp extends App {
 
       return (
          <Provider store={store}>
+            <NextNprogress
+               color="#29D"
+               startPosition="0.3"
+               stopDelayMs="200"
+               height="3"
+            />
             <Component {...pageProps}/>
          </Provider>
       )
