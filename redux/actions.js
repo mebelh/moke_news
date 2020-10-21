@@ -1,6 +1,6 @@
 import {FETCH_NEWS, LOAD_NEWS} from './types'
 
-export function fetchNews(){
+export function fetchNews() {
    return async (dispatch) => {
       const res = await fetch('http://newsapi.org/v2/top-headlines?country=us&apiKey=2fa2b9166a9d4f8a9cdb5bd306d40a71')
       const posts = await res.json()
@@ -14,7 +14,7 @@ export function fetchNews(){
    }
 }
 
-export function loadNews(){
+export function loadNews() {
    return {
       type: LOAD_NEWS
    }

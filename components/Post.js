@@ -4,7 +4,7 @@ import {Body, Image, Title} from './styled'
 
 function Post({title, description, author, urlToImage, publishedAt, content}) {
    return (
-      <div >
+      <div>
          <Link href={'/news/[id]'} as={`/news/${publishedAt}`}>
             <Title>{title}</Title>
          </Link>

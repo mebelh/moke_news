@@ -8,16 +8,20 @@ import {useRouter} from 'next/router'
 function Post({post}) {
    const [data, setData] = useState(post)
    const router = useRouter()
-   useEffect(()=>{
-      async function load(){
-         const request = await fetch('https://newsapi.org/v2/top-headlines?country=us&apiKey=2fa2b9166a9d4f8a9cdb5bd306d40a71')
-         const json = await request.json()
-         setData(
-            json['articles'].filter(el => el.publishedAt === router.query.id)
-         )
+   useEffect(() => {
+      async function load() {
+         try {
+            const request = await fetch('https://newsapi.org/v2/top-headlines?country=us&apiKey=2fa2b9166a9d4f8a9cdb5bd306d40a71')
+            const json = await request.json()
+            setData(
+               json['articles'].filter(el => el.publishedAt === router.query.id)
+            )
+         } catch (e) {
+            throw e
+         }
       }
 
-      if(!post){
+      if (!post) {
          load()
       }
    }, [])
@@ -37,7 +41,7 @@ function Post({post}) {
 }
 
 Post.getInitialProps = async ({query, req}) => {
-   if(!req){
+   if (!req) {
       return {
          data: null
       }
