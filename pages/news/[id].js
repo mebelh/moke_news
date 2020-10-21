@@ -16,7 +16,10 @@ function Post({post}) {
             json['articles'].filter(el => el.publishedAt === router.query.id)
          )
       }
-      load()
+
+      if(!post){
+         load()
+      }
    }, [])
    const {title, description, author, urlToImage, publishedAt, content} = data ? data[0] : []
    return (

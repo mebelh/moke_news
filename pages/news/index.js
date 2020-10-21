@@ -29,7 +29,9 @@ class Index extends React.Component {
          const newsData = await res.json()
          this.setState({newsData: newsData['articles']})
       }
-      load()
+      if(!this.state.newsData){
+         load()
+      }
    }
 
    render(){
