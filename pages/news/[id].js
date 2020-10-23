@@ -2,31 +2,26 @@ import React, {useState, useEffect} from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import {Body, Container, Image, Title} from '../../components/styled'
-import {connect} from 'react-redux'
+import {connect, useDispatch} from 'react-redux'
 import {Navbar} from '../../components/Navbar'
 import {useRouter} from 'next/router'
+import {initializeStore} from '../../redux/store'
+import {fetchNews} from '../../redux/actions'
 
-function Post({post}) {
-   const [data, setData] = useState(post)
+function Post({newsData}) {
    const router = useRouter()
    useEffect(() => {
-      async function load() {
-         try {
-            const request = await fetch('https://newsapi.org/v2/top-headlines?country=us&apiKey=2fa2b9166a9d4f8a9cdb5bd306d40a71')
-            const json = await request.json()
-            setData(
-               json['articles'].filter(el => el.publishedAt === router.query.id)
-            )
-         } catch (e) {
-            throw e
-         }
-      }
-
-      if (!post) {
-         load()
-      }
+      !newsData.length && dispatch(fetchNews())
    }, [])
-   const {title, description, author, urlToImage, publishedAt, content} = data ? data[0] : []
+   const dispatch = useDispatch()
+   console.log(newsData)
+   const post = newsData.filter(p => {
+      if(p.publishedAt === router.query.id){
+         return p
+      }
+   })[0]
+   console.log(post)
+   const {title, description, author, urlToImage, publishedAt, content} = post || []
    return (
       <Container>
          <Head>
@@ -44,22 +39,16 @@ function Post({post}) {
    )
 }
 
-Post.getInitialProps = async ({query, req}) => {
-   if (!req) {
-      return {
-         data: null
-      }
-   }
-   const request = await fetch('https://newsapi.org/v2/top-headlines?country=us&apiKey=2fa2b9166a9d4f8a9cdb5bd306d40a71')
-   const json = await request.json()
-   return {
-      data: json['articles'].filter(el => el.publishedAt === query.id)
-   }
+
+export function getServerSideProps() {
+   const reduxStore = initializeStore()
+
+   return { props: { initialReduxState: reduxStore.getState() } }
 }
 
-const mapStateToProps = ({news}) => {
+const mapStateToProps = ({newsData}) => {
    return {
-      news
+      newsData
    }
 }
 

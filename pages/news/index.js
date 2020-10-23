@@ -1,7 +1,7 @@
 import {Navbar} from '../../components/Navbar'
 import Head from 'next/head'
 import {Post} from '../../components/Post'
-import {Container} from '../../components/styled'
+import {Button, Container} from '../../components/styled'
 import {connect, useDispatch} from 'react-redux'
 import React, {useEffect, useState} from 'react'
 import {fetchNews, loadNews} from '../../redux/actions'
@@ -15,6 +15,7 @@ function Index({showNews}) {
    useEffect(()=>{
       dispatch(fetchNews())
    },[])
+   !showNews.length && dispatch(fetchNews())
 
    return (
       <>
@@ -26,6 +27,9 @@ function Index({showNews}) {
          <Navbar/>
          <Container>
             {showNews ? showNews.map((el, id) => <Post {...el} id={id} key={el.title}/>) : <h3>Загрузка...</h3>}
+            <Button onClick={()=>{
+               dispatch(loadNews())
+            }}>Загрузить еще...</Button>
          </Container>
       </>
    )

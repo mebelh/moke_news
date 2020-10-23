@@ -56,3 +56,13 @@ export const NavContainer = styled.div`
        justify-content: space-between;
        margin: 0 auto;
 `
+
+export const Button = styled.button`
+       width: 200px;
+       height: 40px;
+       background-color: #ececec;
+       outline: none;
+       font-size: 24px;
+       border: 1px solid #eeeeee;
+       margin-bottom: 20px;
+`
