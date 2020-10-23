@@ -33,24 +33,24 @@ function Post({newsData}) {
    )
 }
 
-//
-// export async function getServerSideProps() {
-//    const reduxStore = initializeStore()
-//
-//    const load = async ()=>{
-//       const res = await fetch('http://newsapi.org/v2/top-headlines?country=us&apiKey=2fa2b9166a9d4f8a9cdb5bd306d40a71')
-//       const posts = await res.json()
-//       reduxStore.dispatch({
-//          type: FETCH_NEWS,
-//          payload: posts['articles']
-//       })
-//       reduxStore.dispatch({
-//          type: LOAD_NEWS
-//       })
-//    }
-//    await load()
-//    return { props: { initialReduxState: reduxStore.getState() } }
-// }
+
+export async function getServerSideProps() {
+   const reduxStore = initializeStore()
+
+   const load = async ()=>{
+      const res = await fetch('http://newsapi.org/v2/top-headlines?country=us&apiKey=2fa2b9166a9d4f8a9cdb5bd306d40a71')
+      const posts = await res.json()
+      reduxStore.dispatch({
+         type: FETCH_NEWS,
+         payload: posts['articles']
+      })
+      reduxStore.dispatch({
+         type: LOAD_NEWS
+      })
+   }
+   await load()
+   return { props: { initialReduxState: reduxStore.getState() } }
+}
 
 const mapStateToProps = ({newsData}) => {
    console.log(newsData)
