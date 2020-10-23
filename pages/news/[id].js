@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react'
+import Head from 'next/head'
 import Link from 'next/link'
 import {Body, Container, Image, Title} from '../../components/styled'
 import {connect} from 'react-redux'
@@ -28,6 +29,9 @@ function Post({post}) {
    const {title, description, author, urlToImage, publishedAt, content} = data ? data[0] : []
    return (
       <Container>
+         <Head>
+            <title>{title}</title>
+         </Head>
          <Title>{title}</Title>
          <Navbar/>
          <Body>{author}</Body>

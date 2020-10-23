@@ -1,51 +1,44 @@
 import {Navbar} from '../../components/Navbar'
+import Head from 'next/head'
 import {Post} from '../../components/Post'
 import {Container} from '../../components/styled'
-import {connect} from 'react-redux'
+import {connect, useDispatch} from 'react-redux'
 import React, {useEffect, useState} from 'react'
-import {fetchNews} from '../../redux/actions'
+import {fetchNews, loadNews} from '../../redux/actions'
+import {initializeStore} from '../../redux/store'
+import {FETCH_NEWS, LOAD_NEWS} from '../../redux/types'
+const url = 'https://newsapi.org/v2/top-headlines?country=us&apiKey=2fa2b9166a9d4f8a9cdb5bd306d40a71'
 
+function Index({showNews}) {
 
-function Index({newsData: newsDataServer}){
-   const [newsData, setNewsData] = useState(newsDataServer)
+   const dispatch = useDispatch()
    useEffect(()=>{
-      const load = async () => {
-         try {
-            const res = await fetch('https://newsapi.org/v2/top-headlines?country=us&apiKey=2fa2b9166a9d4f8a9cdb5bd306d40a71')
-            const newsData = await res.json()
-            setNewsData(newsData['articles'])
-         } catch (e) {
-            throw e
-         }
-      }
-      if (!newsDataServer) {
-         load()
-      }
+      dispatch(fetchNews())
    },[])
 
    return (
       <>
+         <Head>
+            <title>
+               News for Boss
+            </title>
+         </Head>
          <Navbar/>
          <Container>
-            {newsData ? newsData.map((el, id) => <Post {...el} id={id} key={el.title}/>) : <h3>Загрузка...</h3>}
+            {showNews ? showNews.map((el, id) => <Post {...el} id={id} key={el.title}/>) : <h3>Загрузка...</h3>}
          </Container>
       </>
    )
 }
 
-Index.getInitialProps = async ({query, req}) => {
-   if (!req) {
-      return {
-         newsData: null
-      }
-   }
-   const res = await fetch('https://newsapi.org/v2/top-headlines?country=us&apiKey=2fa2b9166a9d4f8a9cdb5bd306d40a71')
-   const newsData = await res.json()
-   return {newsData: newsData['articles']}
+export function getServerSideProps() {
+   const reduxStore = initializeStore()
+
+   return { props: { initialReduxState: reduxStore.getState() } }
 }
 
-const mapStateToProps = (news) => {
-   return {}
+const mapStateToProps = ({showNews}) => {
+   return {showNews}
 }
 
 export default connect(mapStateToProps, null)(Index)
